@@ -93,6 +93,32 @@ void limits_init()
   #endif // DEFAULTS_RAMPS_BOARD
 }
 
+void zero_init()
+{
+
+	ZERO_DDR &= ~(ZERO_MASK); // Set as input pins
+
+	#ifdef DISABLE_ZERO_PIN_PULL_UP
+	LIMIT_PORT &= ~(ZERO_MASK); // Normal low operation. Requires external pull-down.
+	#else
+	LIMIT_PORT |= (ZERO_MASK);  // Enable internal pull-up resistors. Normal high operation.
+	#endif
+
+	if (bit_istrue(settings.flags,BITFLAG_ZERO_FLAG_ENABLE)) {
+		ZERO_PCMSK |= ZERO_MASK; // Enable specific pins of the Pin Change Interrupt
+		PCICR |= (1 << ZERO_INT); // Enable Pin Change Interrupt
+		} else {
+		zero_disable();
+	}
+	
+	#ifdef ENABLE_SOFTWARE_DEBOUNCE
+	MCUSR &= ~(1<<WDRF);
+	WDTCSR |= (1<<WDCE) | (1<<WDE);
+	WDTCSR = (1<<WDP0); // Set time-out at ~32msec.
+	#endif
+}
+
+
 
 // Disables hard limits.
 void limits_disable()
@@ -113,6 +139,14 @@ void limits_disable()
   static const uint8_t max_limit_bits[N_AXIS] = {MAX_LIMIT_BIT(0), MAX_LIMIT_BIT(1), MAX_LIMIT_BIT(2)};
   static const uint8_t min_limit_bits[N_AXIS] = {MIN_LIMIT_BIT(0), MIN_LIMIT_BIT(1), MIN_LIMIT_BIT(2)};
 #endif // DEFAULTS_RAMPS_BOARD
+
+void zero_disable()
+{
+	LIMIT_PCMSK &= ~ZERO_MASK;  // Disable specific pins of the Pin Change Interrupt
+	PCICR &= ~(1 << ZERO_INT);  // Disable Pin Change Interrupt
+	
+}
+
 
 // Returns limit state as a bit-wise uint8 variable. Each bit indicates an axis limit, where 
 // triggered is 1 and not triggered is 0. Invert mask is applied. Axes are defined by their

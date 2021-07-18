@@ -35,7 +35,7 @@
 // one configuration file by placing their specific defaults and pin map at the bottom of this file.
 // If doing so, simply comment out these two defines and see instructions below.
 #define DEFAULTS_GENERIC
-#define CPU_MAP_2560_INITIAL
+#define CPU_MAP_2560_CAV
 
 // To use with RAMPS 1.4 Board, comment out the above defines and uncomment the next two defines
 // #define DEFAULTS_RAMPS_BOARD
@@ -90,6 +90,10 @@
 // the user to perform the homing cycle (or override the locks) before doing anything else. This is
 // mainly a safety feature to remind the user to home, since position is unknown to Grbl.
 #define HOMING_INIT_LOCK // Comment to disable
+
+// If zero flag is enabled, homing axes will pullback until zero flag signal is detected by interrupt
+// service routine.
+#define ZERO_FLAG_ENABLED // Comment to disable
 
 // Define the homing cycle patterns with bitmasks. The homing cycle first performs a search mode
 // to quickly engage the limit switches, followed by a slower locate mode, and finished by a short
@@ -328,6 +332,7 @@
 // NOTE: All pins associated with the feature are disabled, i.e. XYZ limit pins, not individual axes.
 // WARNING: When the pull-ups are disabled, this requires additional wiring with pull-down resistors!
 //#define DISABLE_LIMIT_PIN_PULL_UP
+//#define DISABLE_ZERO_PIN_PULL_UP
 //#define DISABLE_PROBE_PIN_PULL_UP
 //#define DISABLE_CONTROL_PIN_PULL_UP
 

@@ -1,0 +1,9 @@
+1. Criei a entrada CPU_MAP_2560_CAV em cpu_map.h, criei as entradas ZERO para os pinos do Zero Flag.
+2. Utilizado o portc pino 0,1,2 para o zero, pcie1
+3. Aumentado o espaço de endereçametno de flag para uint16, para comportar mais uma entrada para zero flag em settings.h
+4. Criado a função de zero_init em limits.c
+5. Criado a entrada disable zero pin em config.h
+6. Criado zero flag enabled em config.h
+7. definido CPU_MAP_2560_CAV em cpu_map.h
+8. Criado zero_disabled em limit.c
+
